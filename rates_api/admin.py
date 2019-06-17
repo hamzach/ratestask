@@ -4,10 +4,9 @@ from .models import Region, Port, Price
 
 
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'url_slug', 'parent',)
+    list_display = ('id', 'name', 'slug', 'parent',)
     list_display_links = ('id', 'name',)
     raw_id_fields = ('parent',)
-    exclude = ('slug',)
     search_fields = ('name',)
 
 

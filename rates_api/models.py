@@ -4,19 +4,11 @@ from django.utils.text import slugify
 
 class Region(models.Model):
     name = models.CharField(max_length=75)
-    slug = models.SlugField()
+    slug = models.CharField(max_length=75, unique=True)
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
-
-    @property
-    def url_slug(self):
-        return '{}-{}'.format(self.slug, self.pk)
 
     def __str__(self):
         return self.name
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.slug = slugify(self.name)
-        super(Region, self).save(force_insert, force_update, using, update_fields)
 
 
 class Port(models.Model):
