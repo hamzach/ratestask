@@ -1,0 +1,47 @@
+GET requirements
+Part 1
+Implement an API endpoint that takes the following parameters: date_from, date_to, origin,
+destination and returns a list with the average prices for each day on a route between Port
+Codes origin and destination. Both origin, destination params accept either Port Codes or
+Region slugs, making it possible to query for average prices per day between geographic
+groups of ports.
+
+API: http://127.0.0.1:8000/rates_api/average_price/?date_from=2016-02-01&date_to=2016-02-05&origin=CNSGH&destination=north_europe_main
+
+Part 2
+Make a second API endpoint return an empty value (JSON null) for days on which there are less
+than 3 prices in total.
+
+API: http://127.0.0.1:8000/rates_api/average_price_3_plus/?date_from=2016-02-01&date_to=2016-02-05&origin=CNSGH&destination=north_europe_main
+
+POST requirements
+Part 1
+Implement an API endpoint where you can upload a price, including the following parameters:
+date_from, date_to, origin_code, destination_code, price
+
+API: http://127.0.0.1:8000/rates_api/upload_price_usd/
+
+Part 2
+Extend that API endpoint so that it could accept prices in different currencies. Convert into
+USD before saving. https://openexchangerates.org/ provides a free API for retrieving currency
+exchange information.
+
+API: http://127.0.0.1:8000/rates_api/upload_price_other/
+
+Batch processing:
+Imagine you need to receive and update big batches of new prices, ranging within tens of
+thousands of items, conforming to a similar format. Describe, using a couple of paragraphs,
+how would you design the system to be able to handle those requirements. What factors do you
+need to take into consideration?
+
+Answer:
+To perform batch operations with python, we can use celery and redis. Celery is used to perform
+time taking tasks asynchronously. So, to do this in our Django project, we will need to create an
+API where user will be able to submit a request for batch processing.
+
+This API will point to a View in Django. This view will return response to the user immediately
+and start the batch processing asyncronously. Celery maintains a tasks queue which contains the tasks
+pending for execution. Celery uses the redis server to discover and perform the tasks.
+
+"shared_task" is a decorator which is used on the method who will perform the batch processing. To
+run this method asyncronously, we call it with suffix apply_async(), e.g. some_method.apply_async().

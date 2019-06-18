@@ -14,7 +14,7 @@ class PortAdmin(admin.ModelAdmin):
     list_display = ('id', 'code', 'name', 'region',)
     list_display_links = ('id', 'code',)
     raw_id_fields = ('region',)
-    search_fields = ('code', 'name',)
+    search_fields = ('code', 'name', 'region__slug')
 
 
 class PriceAdmin(admin.ModelAdmin):
